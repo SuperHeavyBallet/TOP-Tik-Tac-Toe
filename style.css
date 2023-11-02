@@ -1,3 +1,70 @@
 *{
-    background-color: aqua;
+    padding: 0;
+    margin: 0;
+}
+
+.player-turn-indicator{
+    margin: auto;
+    text-align: center;
+    padding: 5px;
+}
+.gameboard-container{
+
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    
+    width: 300px;
+    height: 300px;
+}
+
+.gameboard-piece{
+    border: 1px solid rgb(255, 255, 255);
+    width: 100px;
+    height: 100px;
+    background-color: rgb(145, 179, 209);
+    align-self: center;
+    justify-self: center;
+    
+    
+}
+
+
+
+.mark{
+    text-align: center;
+   padding: 40%;
+   font-size: x-large;
+   display: block;
+        color: aliceblue;
+
+}
+
+.gameboard-piece:hover{
+    background-color: rgb(68, 101, 129);
+
+    
+    .mark{
+        display: block;
+        color: aliceblue;
+    }
+}
+
+.clicked-piece-o{
+    background-color: rgb(68, 83, 221);
+    border: 1px solid rgb(255, 255, 255);
+    width: 100px;
+    height: 100px;
+    align-self: center;
+    justify-self: center;
+}
+
+.clicked-piece-x{
+    background-color: rgb(255, 0, 0);
+    border: 1px solid rgb(255, 255, 255);
+    width: 100px;
+    height: 100px;
+    align-self: center;
+    justify-self: center;
 }
