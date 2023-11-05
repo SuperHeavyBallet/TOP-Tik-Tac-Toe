@@ -1,67 +1,203 @@
-console.log("Hello world.");
+const game = {
+    size: 9,
+    board: [],
+    turnIndicator: document.querySelector('.player-turn-indicator'),
+    turns: 9,
+    turnCounter: document.querySelector('.player-turns-left'),
+    isXPlayerTurn: true,
+    pieceClicked: Array(9).fill(''),
 
-const GameBoard = [];
-const gameBoardSize = 9;
+    
+};
 
 const gameBoardContainer = document.querySelector('.gameboard-container');
+const resultCardContainer = document.querySelector(".result-card-container");
 
-const playerTurnIndicator = document.querySelector('.player-turn-indicator');
-
-let isXPlayerTurn = true;
-playerTurnIndicator.textContent = ('Player X Turn');
-
-for (let i = 0; i < gameBoardSize; i++)
-{
-    const newPiece = document.createElement("div");
-    newPiece.setAttribute('class', 'gameboard-piece');
-    gameBoardContainer.appendChild(newPiece);
+let gameBoardRoughArray = [[],[],[]];
+let gameBoard = [[],[],[]];
 
 
-    
 
-    GameBoard.push(newPiece);
-    console.log(GameBoard);
-
-    
-}
-
-for (let i = 0; i < GameBoard.length; i++)
-{
-    GameBoard[i].addEventListener('click', () => {
-        
-        
-
-        if (isXPlayerTurn)
-        {
-            isXPlayerTurn = false;
-            GameBoard[i].setAttribute('class', 'clicked-piece-x');
-            playerTurnIndicator.textContent = ('Player O Turn');
-
-            const NewPieceMarkX = document.createElement("div");
-            NewPieceMarkX.setAttribute('class', 'mark');
-            NewPieceMarkX.textContent = ("X");
-            GameBoard[i].appendChild(NewPieceMarkX);
-            
-        }
-        else if (!isXPlayerTurn)
-        {
-            isXPlayerTurn = true;
-            GameBoard[i].setAttribute('class', 'clicked-piece-o');
-            playerTurnIndicator.textContent = ('Player X Turn');
-
-            const NewPieceMark0 = document.createElement("div");
-            NewPieceMark0.setAttribute('class', 'mark');
-            NewPieceMark0.textContent = ("O");
-            GameBoard[i].appendChild(NewPieceMark0);
-        }
-
-    })
-}
-
-function Player(name, mark, score){
-
+function Player(name, mark, turn){
     this.name = name;
     this.mark = mark;
-    this.score = score;
+    this.turn = turn;
 
+    const gamePlayerContainer = document.querySelector('.player-card-container');
+    const playerName = document.createElement('div');
+    const playerMark = document.createElement('div');
+    const playerTurn = document.createElement('div');
+    
+    playerName.setAttribute('class', 'player-card');
+    playerMark.setAttribute('class', 'player-card');
+    playerTurn.setAttribute('class', 'player-card');
+
+    playerName.textContent = name;
+    playerMark.textContent = 'Player Mark: ' + mark;
+
+    this.updateTurnText = function(){
+        if (this.turn)
+        {
+            playerTurn.textContent = 'Your Turn Now!';
+        }else{
+            playerTurn.textContent = 'Not Your Turn.';
+        }
+    }
+
+    this.updateTurnText();
+
+    gamePlayerContainer.appendChild(playerName);
+    playerName.appendChild(playerMark);
+    playerName.appendChild(playerTurn);
+
+    this.setTurn = function(value){
+        this.turn = value;
+        this.updateTurnText();
+    }
 }
+
+let player1X = new Player('Player 1', 'X', true);
+let player2O = new Player('Player 2', 'O', false);
+
+game.turnIndicator.textContent = 'Player X Turn';
+
+function createPiece(index){
+    const piece = document.createElement('div');
+    piece.setAttribute('class', 'gameboard-piece');
+
+    
+    
+
+        
+
+
+    piece.addEventListener('click', () => {
+        if (!game.pieceClicked[index]) {
+
+            game.turns --;
+            console.log(game.turns);
+
+
+            if (game.isXPlayerTurn){
+                game.isXPlayerTurn = false;
+                piece.setAttribute('class', 'clicked-piece-x');
+                game.turnIndicator.textContent = 'Player O Turn';
+                game.pieceClicked[index] = 'X';
+                
+                player1X.setTurn(false);
+                player2O.setTurn(true);
+
+                const mark = createMark('X');
+                piece.appendChild(mark);
+
+
+            } else {
+                game.isXPlayerTurn = true;
+                piece.setAttribute('class', 'clicked-piece-o');
+                game.turnIndicator.textContent = 'Player X Turn';
+                player1X.setTurn(true);
+                player2O.setTurn(false);
+                game.pieceClicked[index] = 'O';
+                
+
+                const mark = createMark('O');
+                piece.appendChild(mark);
+
+                
+
+  
+            }
+
+            game.turnCounter.textContent = ('Turns Left: ' + game.turns);
+
+            checkRow();
+            checkColumn();
+            checkDiagonalRight();
+            checkDiagonalLeft();
+
+            if (game.turns == 0)
+{   
+    
+            const resultCard = document.createElement('div');
+            resultCardContainer.appendChild(resultCard);
+            resultCard.setAttribute('class', 'result-card');
+            resultCard.textContent = 'Player ? Wins!';
+}
+          
+
+        }
+
+       
+    
+
+    });
+
+    
+
+    return piece;
+}
+
+
+function createMark(text){
+    const mark = document.createElement('div');
+    mark.setAttribute('class', 'mark');
+    mark.textContent = text;
+    return mark;
+}
+
+function checkRow(){
+
+   for (let i = 0; i < 9; i+=3)
+   {
+        if (game.pieceClicked[i] === 'X' && game.pieceClicked[i+1] === 'X' && game.pieceClicked[i+2] === 'X'){
+            game.turns = 0;
+        }
+        else if (game.pieceClicked[i] === 'O' && game.pieceClicked[i+1] === 'O' && game.pieceClicked[i+2] === 'X'){
+            game.turns = 0;
+        }
+   }
+}
+
+function checkColumn(){
+
+    for (let i = 0; i < 3; i++) {
+        if (game.pieceClicked[i] === 'X' && game.pieceClicked[i + 3] === 'X' && game.pieceClicked[i + 6] === 'X') {
+            game.turns = 0;
+        } else if (game.pieceClicked[i] === 'O' && game.pieceClicked[i + 3] === 'O' && game.pieceClicked[i + 6] === 'O') {
+            game.turns = 0;
+        }
+    }
+ }
+
+ function checkDiagonalRight(){
+    if (game.pieceClicked[0] === 'X' && game.pieceClicked[4] === 'X' && game.pieceClicked[8] === 'X') {
+        game.turns = 0;
+    } else if (game.pieceClicked[0] === 'O' && game.pieceClicked[4] === 'O' && game.pieceClicked[8] === 'O') {
+        game.turns = 0;
+    }
+
+ }
+
+ function checkDiagonalLeft(){
+    if (game.pieceClicked[2] === 'X' && game.pieceClicked[4] === 'X' && game.pieceClicked[6] === 'X') {
+        game.turns = 0;
+    } else if (game.pieceClicked[2] === 'O' && game.pieceClicked[4] === 'O' && game.pieceClicked[6] === 'O') {
+        game.turns = 0;
+    }
+
+ }
+
+function initializeGame() {
+    
+    for (let i = 0; i < game.size; i++)
+    {
+        const newPiece = createPiece(i);
+        game.board.push(newPiece);
+        gameBoardContainer.appendChild(newPiece);
+    }
+
+   
+}
+
+initializeGame();
+

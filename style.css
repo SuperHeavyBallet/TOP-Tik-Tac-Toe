@@ -8,6 +8,12 @@
     text-align: center;
     padding: 5px;
 }
+
+.player-turns-left{
+    margin: auto;
+    text-align: center;
+    padding: 5px;
+}
 .gameboard-container{
 
     margin: auto;
@@ -34,10 +40,10 @@
 
 .mark{
     text-align: center;
-   padding: 40%;
-   font-size: x-large;
-   display: block;
-        color: aliceblue;
+    padding: 40%;
+    font-size: x-large;
+    display: block;
+    color: aliceblue;
 
 }
 
@@ -67,4 +73,29 @@
     height: 100px;
     align-self: center;
     justify-self: center;
+}
+
+.player-card-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    padding: 2vh;
+    
+}
+
+.player-card-container>div:first-of-type{
+
+    grid-area: 1 / 2 / 2 / 4;
+    text-align: start;
+}
+.player-card-container>div{
+
+    grid-area: 1 / 3 / 2 / 4;
+    text-align: end;
+}
+
+.result-card{
+    margin: auto;
+    text-align: center;
+    padding: 5px;
 }
